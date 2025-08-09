@@ -110,6 +110,24 @@
     href="#"
     class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    window.routes = {
+      pendingVerifikasi: "{{ route('notifications.pending-verifikasi') }}"
+    };
+  </script>
+
+  <script>
+    setTimeout(() => {
+      const alertNode = document.querySelector('#alert-container .alert');
+      if (alertNode) {
+        let alert = new bootstrap.Alert(alertNode);
+        alert.close();
+      }
+    }, 4000);
+  </script>
+
   <!-- Vendor JS Files -->
   <script src="{{ asset('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
   <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -122,6 +140,8 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script src="{{ asset('assets/js/notification.js') }}"></script>
 </body>
 
 </html>

@@ -296,24 +296,12 @@
                     <!-- Legend Manual -->
                     <div id="chartLegend" class="d-none justify-content-center gap-4 mt-3">
                       <div class="legend-item d-flex align-items-center">
-                        <span class="legend-color" style="background:#2196F3;"></span>
+                        <span class="legend-color" style="background:#1976D2;"></span>
                         <span class="small fs-7">Target</span>
                       </div>
                       <div class="legend-item d-flex align-items-center">
-                        <span class="legend-color" style="background:#FF0000;"></span>
-                        <span class="small fs-7">Realisasi ≤50%</span>
-                      </div>
-                      <div class="legend-item d-flex align-items-center">
-                        <span class="legend-color" style="background:#FFEB3B;"></span>
-                        <span class="small fs-7">Realisasi ≤75%</span>
-                      </div>
-                      <div class="legend-item d-flex align-items-center">
-                        <span class="legend-color" style="background:#4CAF50;"></span>
-                        <span class="small fs-7">Realisasi &gt;75%</span>
-                      </div>
-                      <div class="legend-item d-flex align-items-center">
-                        <span class="legend-color" style="background:#388E3C;"></span>
-                        <span class="small fs-7">Realisasi 100%</span>
+                        <span class="legend-color" style="background:#ff8c00;"></span>
+                        <span class="small fs-7">Realisasi</span>
                       </div>
                     </div>
 
@@ -642,33 +630,18 @@
         const xMax = Math.ceil(maxValue * 1.15);
         const xMin = 0;
 
-        const realisasiColors = realisasiData.map((realisasi, index) => {
-          const target = targetData[index];
-          const percentage = target > 0 ? (realisasi / target) * 100 : 0;
-
-          if (percentage === 100) {
-            return '#388E3C';
-          } else if (percentage <= 50) {
-            return '#FF0000';
-          } else if (percentage <= 75) {
-            return '#FFEB3B';
-          } else if (percentage > 75) {
-            return '#4CAF50';
-          } else {
-            return '#2196F3';
-          }
-        });
+        // Menentukan warna untuk target dan realisasi
+        const targetColor = '#1976D2'; // Biru tua untuk target
+        const realisasiColor = '#ff8c00'; // Biru muda untuk realisasi
 
         const chart = new ApexCharts(chartContainer, {
           series: [{
-              name: "Target",
-              data: targetData,
-            },
-            {
-              name: "Realisasi",
-              data: realisasiData,
-            }
-          ],
+            name: "Target",
+            data: targetData,
+          }, {
+            name: "Realisasi",
+            data: realisasiData,
+          }],
           chart: {
             type: "bar",
             height: 800,
@@ -684,11 +657,17 @@
                 position: 'right', // Label muncul di kanan batang
               },
               colors: {
-                ranges: realisasiData.map((_, index) => ({
-                  from: realisasiData[index],
-                  to: realisasiData[index],
-                  color: realisasiColors[index],
-                })),
+                ranges: targetData.map(() => ({
+                  from: 0,
+                  to: 0,
+                  color: targetColor, // Warna biru tua untuk target
+                })).concat(
+                  realisasiData.map(() => ({
+                    from: 0,
+                    to: 0,
+                    color: realisasiColor, // Warna biru muda untuk realisasi
+                  }))
+                ),
               },
             },
           },
@@ -711,11 +690,12 @@
             },
             textAnchor: 'start',
           },
-          colors: ['#2196F3', null],
+          // Menggunakan warna biru tua untuk target dan biru muda untuk realisasi
+          colors: [targetColor, realisasiColor],
           xaxis: {
             categories: categories,
             min: 0,
-            max: Math.ceil(Math.max(...targetData, ...realisasiData) * 1.15),
+            max: xMax,
             title: {
               text: "Sampel"
             },

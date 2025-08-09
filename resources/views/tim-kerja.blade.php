@@ -101,6 +101,14 @@
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
+
+                {{-- Alert Validasi Nama Tim Kerja --}}
+                @if($errors->has('nama_tim'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="font-size: 0.9rem;">
+                  Tim kerja sudah ditambahkan
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
               </div>
 
               {{-- Search --}}
@@ -251,7 +259,7 @@
                             <label for="nama_tim" class="form-label mb-0">Nama Tim</label>
                             <br>
                             <small class="form-text text-muted mt-0 mb-3">Masukkan nama tim kerja dengan huruf kapital tiap awal kata</small>
-                            <input type="text" class="form-control mt-1" name="nama_tim" id="nama_tim">
+                            <input type="text" class="form-control mt-1" name="nama_tim" id="nama_tim" required>
                           </div>
                         </div>
                         <div class="modal-footer border-0 p-2">

@@ -93,7 +93,15 @@
                 </div>
                 @endif
 
-                @if($errors->has('nama_satuan_kerja'))
+                @if(session('error_rows'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="white-space: pre-line; line-height: 1; font-size: 0.9rem;">
+                  <strong class="mb-0 d-block" style="margin-bottom: 0;">Data berikut tidak valid atau kolom kosong</strong>
+                  <span style="display: block; margin-top: 0.1rem;">{!! nl2br(e(session('error_rows'))) !!}</span>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                @endif
+
+                @if($errors->has('kode_satuan_kerja'))
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                   Satuan kerja sudah ditambahkan
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

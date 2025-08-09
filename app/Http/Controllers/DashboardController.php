@@ -21,8 +21,13 @@ class DashboardController extends Controller
         // Ambil semua data monitoring kegiatan beserta relasi datakegiatan
         $monitoringData = MonitoringKegiatan::with('datakegiatan')->get();
 
-        // Total seluruh kegiatan survey
-        $totalKegiatan = MonitoringKegiatan::count();
+        // Tahun berjalan
+        $currentYear = Carbon::now()->year;
+
+        // Total seluruh kegiatan survey pada tahun ini
+        $totalKegiatan = MonitoringKegiatan::whereYear('waktu_mulai', $currentYear)
+            ->orWhereYear('waktu_selesai', $currentYear)
+            ->count();
 
         // Dapatkan awal dan akhir bulan saat ini
         $startOfMonth = Carbon::now()->startOfMonth(); // Contoh: 2025-03-01 00:00:00
@@ -47,19 +52,20 @@ class DashboardController extends Controller
             ->sum('target_satker');
 
         // Hitung akumulasi realisasi sampel dengan update terakhir per target
-        // Update_target_realisasis dihubungkan dengan target_realisasi_satkers melalui kolom id_target_realisasi
         $totalRealisasiSampel = DB::table('update_target_realisasis as utr')
             ->join(
-                DB::raw("(SELECT id_target_realisasi, MAX(updated_at) as latest_update FROM update_target_realisasis GROUP BY id_target_realisasi) as latest"),
+                DB::raw("(SELECT id_target_realisasi, MAX(updated_at) as latest_update 
+                 FROM update_target_realisasis 
+                 WHERE status = 'diterima' 
+                 GROUP BY id_target_realisasi) as latest"),
                 function ($join) {
                     $join->on('utr.id_target_realisasi', '=', 'latest.id_target_realisasi')
                         ->on('utr.updated_at', '=', 'latest.latest_update');
                 }
             )
             ->join('target_realisasi_satkers as trs', 'trs.id', '=', 'utr.id_target_realisasi')
-            ->whereIn('trs.id_monitoring_kegiatan', $kegiatanIds)
-            ->where('utr.status', 'diterima')
-            ->sum('utr.realisasi_satker');
+            ->whereIn('trs.id_monitoring_kegiatan', $kegiatanIds)  // Filter berdasarkan kegiatan bulan ini
+            ->sum('utr.realisasi_satker');  // Jumlahkan realisasi sampel per kegiatan
 
         return view('dashboard', [
             'timNames'              => $timNames,

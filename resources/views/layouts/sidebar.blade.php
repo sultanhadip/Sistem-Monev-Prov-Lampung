@@ -66,21 +66,41 @@
             </a>
         </li>
 
-        <!-- Sertifikat -->
-        <!-- @can('isAdmin')
         <li class="nav-item">
-            <a class="nav-link {{ Request::routeIs('sertifikat') ? 'active' : 'collapsed' }}" href="{{ route('sertifikat') }}">
-                <i class="bi bi-archive"></i>
-                <span>Sertifikat</span>
+            @canany(['isAdmin']) <!-- Hanya bisa diakses oleh isAdmin -->
+            <a class="nav-link collapsed" data-bs-toggle="collapse" href="#sertifikat-nav">
+                <i class="bi bi-archive"></i><span>Sertifikat</span>
+                <i class="bi bi-chevron-down ms-auto"></i>
             </a>
+            <ul id="sertifikat-nav" class="nav-content collapse {{ Request::routeIs('edit-sertifikat.edit') || Request::routeIs('sertifikat') ? 'show' : '' }}" data-bs-parent="#sidebar-nav">
+
+                @can('isAdmin')
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::routeIs('edit-sertifikat.edit') ? 'active' : 'collapsed' }}" href="{{ route('edit-sertifikat.edit') }}">
+                        <i class="bi bi-file-earmark-text fs-6"></i>
+                        <span>Template</span>
+                    </a>
+                </li>
+                @endcan
+
+                @can('isAdmin')
+                <li class="nav-item">
+                    <a class="nav-link {{ Request::routeIs('sertifikat') ? 'active' : 'collapsed' }}" href="{{ route('sertifikat') }}">
+                        <i class="bi bi-award fs-6"></i>
+                        <span>Data Sertifikat</span>
+                    </a>
+                </li>
+                @endcan
+            </ul>
+            @endcanany
         </li>
-        @endcan -->
+
 
         <!-- Kelola User -->
         @canany(['isAdmin', 'isAdminProv', 'isAdminSatker'])
         <li>
             <a class="nav-link {{ Request::routeIs('kelola-user') ? 'active' : 'collapsed' }}" href="{{ route('kelola-user') }}">
-                <i class="bi bi-person-circle fs-6"></i><span class="ps-6">Kelola User</span>
+                <i class="bi bi-person-circle fs-6"></i><span class="ps-6">Kelola Pengguna</span>
             </a>
         </li>
         @endcanany

@@ -106,14 +106,13 @@ class PenilaianController extends Controller
                 return response()->json(['message' => 'Tidak ada data kegiatan untuk dihitung.'], 400);
             }
 
-            // Step 1: Menghitung nilai kegiatan
+
             $nilaiTimKerja = [];
 
             foreach ($kegiatan as $item) {
                 $nilaiRealisasi = $this->hitungRealisasi($item->target_satker, $item->realisasi_satker);
                 $nilaiWaktu = $this->hitungWaktu($item->target_satker, $item->realisasi_satker, $item->updated_at, $item->waktu_selesai);
 
-                // Nilai akhir untuk kegiatan
                 $nilaiAkhirKegiatan = (0.7 * $nilaiRealisasi) + (0.3 * $nilaiWaktu);
 
                 // Simpan nilai kegiatan per tim kerja
