@@ -66,8 +66,8 @@
             </a>
         </li>
 
-        <li class="nav-item">
-            @canany(['isAdmin']) <!-- Hanya bisa diakses oleh isAdmin -->
+        <!-- <li class="nav-item">
+            @canany(['isAdmin']) 
             <a class="nav-link collapsed" data-bs-toggle="collapse" href="#sertifikat-nav">
                 <i class="bi bi-archive"></i><span>Sertifikat</span>
                 <i class="bi bi-chevron-down ms-auto"></i>
@@ -93,7 +93,7 @@
                 @endcan
             </ul>
             @endcanany
-        </li>
+        </li> -->
 
 
         <!-- Kelola User -->
